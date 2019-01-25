@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config({ path: 'variables.env' });
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 // Graphql-express middleware
 const { graphiqlExpress, graphqlExpress } = require('apollo-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
@@ -26,6 +27,20 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// SET UP JWT AUTH MIDDLEWARE
+app.use(async (req, res, next) => {
+  const token = req.headers['authorization'];
+  if (token !== "null") {
+    try {
+      const currentUser = await jwt.verify(token, process.env.SECRET);
+      console.log(currentUser);
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  next();
+});
 
 const PORT = process.env.PORT || 4444;
 

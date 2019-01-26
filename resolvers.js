@@ -15,6 +15,14 @@ exports.resolvers = {
       return allRecipes;
     },
 
+    getRecipe: async (parent, args, ctx) => {
+      const { _id } = args;
+      const { Recipe } = ctx;
+
+      const recipe = await Recipe.findOne({ _id });
+      return recipe;
+    },
+
     getCurrentUser: async (parent, args, ctx) => {
       const { User, currentUser } = ctx; // rzeczy ktore sa ustawione w context w server.js
 

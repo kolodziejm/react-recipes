@@ -34,7 +34,7 @@ app.use(async (req, res, next) => {
   if (token !== "null") {
     try {
       const currentUser = await jwt.verify(token, process.env.SECRET);
-      console.log(currentUser);
+      req.currentUser = currentUser;
     } catch (err) {
       console.log(err)
     }
@@ -50,13 +50,14 @@ app.use(express.json());
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 // Connect Schemas with Graphql
-app.use('/graphql', graphqlExpress({
+app.use('/graphql', graphqlExpress(({ currentUser }) => ({
   schema,
   context: {
     Recipe,
-    User
+    User,
+    currentUser
   }
-}));
+})));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {

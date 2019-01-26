@@ -13,6 +13,20 @@ exports.resolvers = {
 
       const allRecipes = await Recipe.find();
       return allRecipes;
+    },
+
+    getCurrentUser: async (parent, args, ctx) => {
+      const { User, currentUser } = ctx; // rzeczy ktore sa ustawione w context w server.js
+
+      if (!currentUser) {
+        return null;
+      }
+      const user = await User.findOne({ username: currentUser.username })
+        .populate({
+          path: 'favorites',
+          model: 'Recipe'
+        });
+      return user;
     }
   },
   Mutation: {

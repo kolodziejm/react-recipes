@@ -11,6 +11,12 @@ import { ApolloProvider } from 'react-apollo';
 import App from './components/App';
 import Signin from './components/Auth/Signin';
 import Signup from './components/Auth/Signup';
+import Search from './components/Recipe/Search';
+import AddRecipe from './components/Recipe/AddRecipe';
+import Profile from './components/Profile/Profile';
+
+import withSession from './components/withSession';
+import Navbar from './components/Navbar';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4444/graphql',
@@ -32,17 +38,28 @@ const client = new ApolloClient({
   }
 })
 
-const app = (
-  <ApolloProvider client={client}>
-    <Router>
+const Root = ({ refetch, session }) => (
+  <Router>
+    <>
+      <Navbar session={session} />
       <Switch>
         <Route path="/" exact component={App} />
-        <Route path="/signin" component={Signin} />
-        <Route path="/signup" component={Signup} />
+        <Route path="/search" component={Search} />
+        <Route path="/recipe/add" component={AddRecipe} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/signin" render={() => <Signin refetch={refetch} />} />
+        <Route path="/signup" render={() => <Signup refetch={refetch} />} />
         <Redirect to="/" />
       </Switch>
-    </Router>
-  </ApolloProvider>
+    </>
+  </Router>
 )
 
-ReactDOM.render(app, document.getElementById('root'));
+const RootWithSession = withSession(Root);
+
+
+ReactDOM.render(
+  <ApolloProvider client={client}>
+    <RootWithSession />
+  </ApolloProvider>,
+  document.getElementById('root'));

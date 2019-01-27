@@ -23,6 +23,19 @@ exports.resolvers = {
       return recipe;
     },
 
+    searchRecipes: async (parent, args, ctx) => {
+      const { searchTerm } = args;
+      const { Recipe } = ctx;
+
+      if (searchTerm) {
+        const searchResults = await Recipe.find({ $text: { $search: searchTerm } }, { score: { $meta: "textScore" } }).sort({ score: { $meta: "textScore" } });
+        return searchResults;
+      } else {
+        const recipes = await Recipe.find().sort({ likes: 'desc', createdDate: 'desc' });
+        return recipes;
+      }
+    },
+
     getCurrentUser: async (parent, args, ctx) => {
       const { User, currentUser } = ctx; // rzeczy ktore sa ustawione w context w server.js
 

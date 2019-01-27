@@ -36,6 +36,14 @@ exports.resolvers = {
       }
     },
 
+    getUserRecipes: async (parent, args, ctx) => {
+      const { username } = args;
+      const { Recipe } = ctx;
+
+      const userRecipes = await Recipe.find({ username }).sort({ createdDate: "desc" });
+      return userRecipes;
+    },
+
     getCurrentUser: async (parent, args, ctx) => {
       const { User, currentUser } = ctx; // rzeczy ktore sa ustawione w context w server.js
 
@@ -65,6 +73,15 @@ exports.resolvers = {
       newRecipe.save()
       return newRecipe;
     },
+
+    deleteUserRecipe: async (parent, args, ctx) => {
+      const { _id } = args;
+      const { Recipe } = ctx;
+
+      const recipe = await Recipe.findOneAndRemove({ _id });
+      return recipe;
+    },
+
     // LOGOWANIE
     signinUser: async (parent, args, ctx) => {
       const { username, password } = args;

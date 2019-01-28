@@ -91,6 +91,16 @@ exports.resolvers = {
       return recipe;
     },
 
+    unlikeRecipe: async (parent, args, ctx) => {
+      const { _id, username } = args;
+      const { Recipe, User } = ctx;
+
+      const recipe = await Recipe.findOneAndUpdate({ _id }, { $inc: { likes: -1 } }); // $inc - increment. pierwszy arg - znalezienie, drugi - co chcemy zmienic
+      const user = await User.findOneAndUpdate({ username }, { $pull: { favorites: _id } });
+      return recipe;
+    },
+
+
     // LOGOWANIE
     signinUser: async (parent, args, ctx) => {
       const { username, password } = args;

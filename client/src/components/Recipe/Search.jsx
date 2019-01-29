@@ -21,6 +21,7 @@ class Search extends Component {
           <div className="App">
             <input
               type="search"
+              className="search"
               name=""
               placeholder="Search for Recipes"
               onChange={async e => {

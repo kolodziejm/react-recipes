@@ -81,7 +81,9 @@ class AddRecipe extends Component {
             <div className="App">
               <h2 className="App">Add Recipe</h2>
               <form className="form" onSubmit={(e) => this.submitHandler(e, addRecipe)} >
+                <label htmlFor="name">Recipe Name</label>
                 <input type="text" name="name" placeholder="Recipe Name" onChange={this.inputChangedHandler} value={name} />
+                <label htmlFor="imageUrl">Recipe Image</label>
                 <input type="text" name="imageUrl" placeholder="Recipe Image" onChange={this.inputChangedHandler} value={imageUrl} />
                 <select name="category" onChange={this.inputChangedHandler} value={category}>
                   <option value="Breakfast">Breakfast</option>
@@ -89,6 +91,7 @@ class AddRecipe extends Component {
                   <option value="Dinner">Dinner</option>
                   <option value="Snack">Snack</option>
                 </select>
+                <label htmlFor="description">Recipe Description</label>
                 <input type="text" name="description" placeholder="Add description" onChange={this.inputChangedHandler} value={description} />
                 <label htmlFor="instructions">Add Instructions</label>
                 <CKEditor

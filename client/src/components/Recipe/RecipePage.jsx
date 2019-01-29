@@ -5,13 +5,14 @@ import { Query } from 'react-apollo';
 import { GET_RECIPE } from '../../queries/index';
 
 import LikeRecipe from './LikeRecipe';
+import Spinner from '../Spinner';
 
 const RecipePage = ({ match }) => {
   const { _id } = match.params; // this.props.match.params 
   return (
     <Query query={GET_RECIPE} variables={{ _id }}>
       {({ data, loading, error }) => {
-        if (loading) return <div>Loading</div>
+        if (loading) return <Spinner />
         if (error) return <div>Error</div>
         return (
           <div>

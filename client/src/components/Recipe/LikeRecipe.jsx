@@ -61,13 +61,11 @@ class LikeRecipe extends Component {
     if (this.state.liked) {
       likeRecipe()
         .then(async ({ data }) => {
-          console.log(data);
           await this.props.refetch();
         });
     } else {
       unlikeRecipe()
         .then(async ({ data }) => {
-          console.log(data);
           await this.props.refetch();
         });
     }

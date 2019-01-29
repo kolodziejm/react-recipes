@@ -13,7 +13,6 @@ const App = () => (
       {({ data, loading, error }) => {
         if (loading) return <div>Loading...</div>
         if (error) return <div>Error occured</div>
-        console.log(data);
         return (
           <ul>{data.getAllRecipes.map(recipe => <RecipeItem key={recipe._id} {...recipe} />)}
           </ul>

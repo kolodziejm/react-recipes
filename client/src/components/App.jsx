@@ -8,13 +8,14 @@ import './App.css';
 
 const App = () => (
   <div className="App">
-    <h1>Home</h1>
+    <h1 className="main-title">Find Recipes You <strong>love</strong></h1>
     <Query query={GET_ALL_RECIPES}>
       {({ data, loading, error }) => {
         if (loading) return <div>Loading...</div>
         if (error) return <div>Error occured</div>
         return (
-          <ul>{data.getAllRecipes.map(recipe => <RecipeItem key={recipe._id} {...recipe} />)}
+          <ul className="cards">{data.getAllRecipes.map(recipe =>
+            <RecipeItem key={recipe._id} {...recipe} />)}
           </ul>
         );
       }}

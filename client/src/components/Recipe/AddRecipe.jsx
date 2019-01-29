@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom';
+import CKEditor from 'react-ckeditor-component';
 
 import { Mutation } from 'react-apollo';
 import { ADD_RECIPE, GET_ALL_RECIPES, GET_USER_RECIPES } from '../../queries';
@@ -9,6 +10,7 @@ import withAuth from '../withAuth';
 
 const initialState = {
   name: '',
+  imageUrl: '',
   category: 'Breakfast',
   description: '',
   instructions: '',
@@ -27,13 +29,18 @@ class AddRecipe extends Component {
 
   inputChangedHandler = e => this.setState({ [e.target.name]: e.target.value });
 
+  editorHandler = e => {
+    const newContent = e.editor.getData();
+    this.setState({ instructions: newContent })
+  }
+
   componentDidMount() {
     this.setState({ username: this.props.session.getCurrentUser.username })
   }
 
   validateForm = () => {
-    const { name, category, description, instructions } = this.state;
-    const isInvalid = !name || !category || !description || !instructions;
+    const { name, imageUrl, category, description, instructions } = this.state;
+    const isInvalid = !name || !imageUrl || !category || !description || !instructions;
     return isInvalid;
   }
 
@@ -58,12 +65,12 @@ class AddRecipe extends Component {
   }
 
   render() {
-    const { name, category, description, instructions, username } = this.state;
+    const { name, imageUrl, category, description, instructions, username } = this.state;
 
     return (
       <Mutation
         mutation={ADD_RECIPE}
-        variables={{ name, category, description, instructions, username }}
+        variables={{ name, imageUrl, category, description, instructions, username }}
         refetchQueries={() => [
           { query: GET_USER_RECIPES, variables: { username } }
         ]}
@@ -75,6 +82,7 @@ class AddRecipe extends Component {
               <h2 className="App">Add Recipe</h2>
               <form className="form" onSubmit={(e) => this.submitHandler(e, addRecipe)} >
                 <input type="text" name="name" placeholder="Recipe Name" onChange={this.inputChangedHandler} value={name} />
+                <input type="text" name="imageUrl" placeholder="Recipe Image" onChange={this.inputChangedHandler} value={imageUrl} />
                 <select name="category" onChange={this.inputChangedHandler} value={category}>
                   <option value="Breakfast">Breakfast</option>
                   <option value="Lunch">Lunch</option>
@@ -82,7 +90,13 @@ class AddRecipe extends Component {
                   <option value="Snack">Snack</option>
                 </select>
                 <input type="text" name="description" placeholder="Add description" onChange={this.inputChangedHandler} value={description} />
-                <textarea name="instructions" onChange={this.inputChangedHandler} placeholder="Add instructions" value={instructions} ></textarea>
+                <label htmlFor="instructions">Add Instructions</label>
+                <CKEditor
+                  name="instructions"
+                  content={instructions} // this.state.instructions
+                  events={{ change: this.editorHandler }}
+                />
+                {/* <textarea name="instructions" onChange={this.inputChangedHandler} placeholder="Add instructions" value={instructions} ></textarea> */}
                 <button disabled={loading || this.validateForm()} type="submit" className="button-primary">Submit</button>
                 {error && <Error error={error} />}
               </form>

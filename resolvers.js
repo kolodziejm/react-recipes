@@ -60,11 +60,12 @@ exports.resolvers = {
   },
   Mutation: {
     addRecipe: async (parent, args, ctx) => {
-      const { name, description, category, instructions, username } = args;
+      const { name, imageUrl, description, category, instructions, username } = args;
       const { Recipe } = ctx; // model którego potrzebujemy
 
       const newRecipe = await new Recipe({
         name,
+        imageUrl,
         description,
         category,
         instructions,

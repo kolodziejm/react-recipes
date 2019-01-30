@@ -83,6 +83,18 @@ exports.resolvers = {
       return recipe;
     },
 
+    updateUserRecipe: async (parent, args, ctx) => {
+      const { _id, name, imageUrl, description, category } = args;
+      const { Recipe } = ctx;
+
+      const updatedRecipe = await Recipe.findOneAndUpdate(
+        { _id },
+        { $set: { name, imageUrl, category, description } },
+        { new: true }
+      );
+      return updatedRecipe;
+    },
+
     likeRecipe: async (parent, args, ctx) => {
       const { _id, username } = args;
       const { Recipe, User } = ctx;

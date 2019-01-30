@@ -54,6 +54,19 @@ export const DELETE_USER_RECIPE = gql`
   }
 `;
 
+export const UPDATE_USER_RECIPE = gql`
+  mutation($_id: ID!,$name: String!, $imageUrl: String!, $description: String!, $category: String!) {
+    updateUserRecipe(_id: $_id, name: $name, imageUrl: $imageUrl, description: $description, category: $category) {
+      _id
+      name
+      likes
+      category
+      imageUrl
+      description
+    }
+  }
+`;
+
 export const LIKE_RECIPE = gql`
   mutation($_id: ID!, $username: String!) {
     likeRecipe(_id: $_id, username: $username) {
@@ -94,6 +107,9 @@ export const GET_USER_RECIPES = gql`
       _id
       name
       likes
+      imageUrl
+      category
+      description
     }
   }
 `;
